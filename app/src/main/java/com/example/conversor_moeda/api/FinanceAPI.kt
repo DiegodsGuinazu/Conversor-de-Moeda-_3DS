@@ -1,6 +1,7 @@
 package com.example.conversor_moeda.api
 
-import rettrofit2.Call
+import com.example.conversor_moeda.model.FinanceResponse
+import retrofit2.Call
 import retrofit2.http.GET
 
 interface FinanceAPI {

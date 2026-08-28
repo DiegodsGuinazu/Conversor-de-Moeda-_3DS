@@ -16,6 +16,12 @@ import retrofit2.Callback
 import retrofit2.Response
 
 class MainActivity : AppCompatActivity() {
+
+    var cotacaoDollar : Double = 0.0
+    var cotacaoEuro : Double = 0.0
+    var cotacaoPeso : Double = 0.0
+    var cotacaoLibra : Double = 0.0
+
     @SuppressLint("MissingInflatedId")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -32,25 +38,34 @@ class MainActivity : AppCompatActivity() {
         val moedasAdapter = ArrayAdapter(this,android.R.layout.simple_spinner_item,moedas)
 
         spMoeda.adapter = moedasAdapter
+        carregarCotacoes()
 
         val btnConverte = findViewById<Button>(R.id.btnConverter)
         btnConverte.setOnClickListener {
-            ClientApi.api.getCotacoes().enqueue(object : Callback<FinanceResponse>{
-                override fun onResponse(
-                    p0: Call<FinanceResponse?>,
-                    response: Response<FinanceResponse?>
-                ) {
-                    println(response.body().toString())
-                }
 
-                override fun onFailure(
-                    p0: Call<FinanceResponse?>,
-                    p1: Throwable
-                ) {
-                    TODO("Not yet implemented")
-                }
-
-            })
         }
+    }
+
+    private fun carregarCotacoes() {
+        ClientApi.api.getCotacoes().enqueue(object : Callback<FinanceResponse> {
+            override fun onResponse(
+                p0: Call<FinanceResponse?>,
+                response: Response<FinanceResponse?>
+            ) {
+                val moedas = response.body()?.results?.currencies
+                cotacaoDollar = moedas?.USD?.buy ?: 0.0
+                cotacaoEuro = moedas?.EUR?.buy ?: 0.0
+                cotacaoPeso = moedas?.ARS?.buy ?: 0.0
+                cotacaoLibra = moedas?.GBP?.buy ?: 0.0
+            }
+
+            override fun onFailure(
+                p0: Call<FinanceResponse?>,
+                p1: Throwable
+            ) {
+                TODO("Not yet implemented")
+            }
+
+        })
     }
 }

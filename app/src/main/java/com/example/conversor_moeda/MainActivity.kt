@@ -4,7 +4,9 @@ import android.annotation.SuppressLint
 import android.os.Bundle
 import android.widget.ArrayAdapter
 import android.widget.Button
+import android.widget.EditText
 import android.widget.Spinner
+import android.widget.TextView
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
@@ -42,7 +44,19 @@ class MainActivity : AppCompatActivity() {
 
         val btnConverte = findViewById<Button>(R.id.btnConverter)
         btnConverte.setOnClickListener {
-
+            val valor = findViewById<EditText>(R.id.txtValor).text.toString().toDouble()
+            val itemSelecionado = spMoeda.selectedItem.toString()
+            val valorCotacao = when(itemSelecionado){
+                "Dollar" -> valor * cotacaoDollar
+                "Euro" -> valor * cotacaoEuro
+                "Peso Argentino" -> valor * cotacaoPeso
+                "Libra" -> valor * cotacaoLibra
+                else -> {
+                    0.0
+                }
+            }
+            val resultado = findViewById<TextView>(R.id.textViewResultado)
+            resultado.text = "Valor em reais %.2f".format(valorCotacao)
         }
     }
 
